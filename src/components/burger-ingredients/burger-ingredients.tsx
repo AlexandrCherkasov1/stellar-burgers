@@ -1,22 +1,19 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
-
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useSelector } from '../../services/stores/store';
-import { getIngredients } from '../../services/slices/ingredientsSlice';
+import {
+  selectBuns,
+  selectMains,
+  selectSauces
+} from '../../services/slices/ingredientsSlice';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  const buns = useSelector((state) =>
-    state.ingredients.ingredients.filter((item) => item.type === 'bun')
-  );
-  const mains = useSelector((state) =>
-    state.ingredients.ingredients.filter((item) => item.type === 'main')
-  );
-  const sauces = useSelector((state) =>
-    state.ingredients.ingredients.filter((item) => item.type === 'sauce')
-  );
+  // Используем мемоизированные селекторы
+  const buns = useSelector(selectBuns);
+  const mains = useSelector(selectMains);
+  const sauces = useSelector(selectSauces);
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
@@ -47,12 +44,14 @@ export const BurgerIngredients: FC = () => {
 
   const onTabClick = (tab: string) => {
     setCurrentTab(tab as TTabMode);
-    if (tab === 'bun')
-      titleBunRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'main')
-      titleMainRef.current?.scrollIntoView({ behavior: 'smooth' });
-    if (tab === 'sauce')
-      titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const refs = {
+      bun: titleBunRef,
+      main: titleMainRef,
+      sauce: titleSaucesRef
+    };
+    refs[tab as keyof typeof refs]?.current?.scrollIntoView({
+      behavior: 'smooth'
+    });
   };
 
   return (

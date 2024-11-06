@@ -1,6 +1,11 @@
 import { getIngredientsApi } from '@api';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector
+} from '@reduxjs/toolkit';
 import { TIngredient } from '@utils-types';
+import { RootState } from '../stores/store';
 
 export interface IIngredientsState {
   ingredients: TIngredient[];
@@ -14,8 +19,24 @@ const initialState: IIngredientsState = {
   error: ''
 };
 
+// Базовый селектор
+const selectIngredients = (state: RootState) => state.ingredients.ingredients;
+
+// Мемоизированные селекторы для каждого типа ингредиентов
+export const selectBuns = createSelector([selectIngredients], (ingredients) =>
+  ingredients.filter((item) => item.type === 'bun')
+);
+
+export const selectMains = createSelector([selectIngredients], (ingredients) =>
+  ingredients.filter((item) => item.type === 'main')
+);
+
+export const selectSauces = createSelector([selectIngredients], (ingredients) =>
+  ingredients.filter((item) => item.type === 'sauce')
+);
+
 export const ingredientsSlice = createSlice({
-  name: 'ingridient',
+  name: 'ingredient',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -39,8 +60,5 @@ export const getIngredients = createAsyncThunk<TIngredient[]>(
   'ingredients',
   async () => getIngredientsApi()
 );
-
-// Action creators are generated for each case reducer function
-export const {} = ingredientsSlice.actions;
 
 export default ingredientsSlice.reducer;
