@@ -24,8 +24,23 @@ const ROUTES = {
   PUBLIC: [
     { path: '/', element: <ConstructorPage /> },
     { path: '/feed', element: <Feed /> },
-    { path: '/ingredients/:id', element: <IngredientDetails /> },
-    { path: '/feed/:id', element: <OrderInfo /> },
+    {
+      path: '/ingredients/:id',
+      element: (
+        <div className={styles.detailPageWrap}>
+          <h1 className={styles.detailHeader}>Детали ингредиента</h1>
+          <IngredientDetails />
+        </div>
+      )
+    },
+    {
+      path: '/feed/:id',
+      element: (
+        <div className={styles.detailPageWrap}>
+          <OrderInfo />
+        </div>
+      )
+    },
     { path: '*', element: <NotFound404 /> }
   ],
   PROTECTED: [
@@ -37,7 +52,14 @@ const ROUTES = {
   AUTH_REQUIRED: [
     { path: '/profile', element: <Profile /> },
     { path: '/profile/orders', element: <ProfileOrders /> },
-    { path: '/profile/orders/:id', element: <OrderInfo /> }
+    {
+      path: '/profile/orders/:id',
+      element: (
+        <div className={styles.detailPageWrap}>
+          <OrderInfo />
+        </div>
+      )
+    }
   ],
   MODAL: [
     {
@@ -67,54 +89,56 @@ const App = () => {
   useEffect(() => {
     dispatch(checkUserAuth());
     dispatch(getIngredients());
-  }, [dispatch]); // добавил dispatch в зависимости
+  }, [dispatch]);
 
   const onModalClose = () => navigate(-1);
 
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
-        {/* Публичные маршруты */}
-        {ROUTES.PUBLIC.map(({ path, element }) => (
-          <Route key={path} path={path} element={element} />
-        ))}
+      <main className={styles.main}>
+        <Routes location={background || location}>
+          {/* Публичные маршруты */}
+          {ROUTES.PUBLIC.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
 
-        {/* Маршруты только для неавторизованных */}
-        {ROUTES.PROTECTED.map(({ path, element }) => (
-          <Route
-            key={path}
-            path={path}
-            element={<OnlyUnAuth component={element} />}
-          />
-        ))}
-
-        {/* Маршруты только для авторизованных */}
-        {ROUTES.AUTH_REQUIRED.map(({ path, element }) => (
-          <Route
-            key={path}
-            path={path}
-            element={<OnlyAuth component={element} />}
-          />
-        ))}
-      </Routes>
-
-      {/* Модальные окна */}
-      {background && (
-        <Routes>
-          {ROUTES.MODAL.map(({ path, title, element }) => (
+          {/* Маршруты только для неавторизованных */}
+          {ROUTES.PROTECTED.map(({ path, element }) => (
             <Route
               key={path}
               path={path}
-              element={
-                <Modal title={title} onClose={onModalClose}>
-                  {element}
-                </Modal>
-              }
+              element={<OnlyUnAuth component={element} />}
+            />
+          ))}
+
+          {/* Маршруты только для авторизованных */}
+          {ROUTES.AUTH_REQUIRED.map(({ path, element }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<OnlyAuth component={element} />}
             />
           ))}
         </Routes>
-      )}
+
+        {/* Модальные окна */}
+        {background && (
+          <Routes>
+            {ROUTES.MODAL.map(({ path, title, element }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <Modal title={title} onClose={onModalClose}>
+                    {element}
+                  </Modal>
+                }
+              />
+            ))}
+          </Routes>
+        )}
+      </main>
     </div>
   );
 };
