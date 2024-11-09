@@ -7,7 +7,6 @@ import { useSelector } from '../../services/stores/store';
 import { getOrderByNumberApi } from '@api';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
   const params = useParams();
   const [orderData, setOrderData] = useState<TOrder>({
     _id: '',
@@ -19,15 +18,16 @@ export const OrderInfo: FC = () => {
     ingredients: ['']
   });
 
-  const ingredients: TIngredient[] = useSelector(
-    (store) => store.ingredients.ingredients
-  );
+  const ingredients = useSelector((store) => store.ingredients.ingredients);
 
   useEffect(() => {
-    getOrderByNumberApi(Number(params.number)).then((data) => {
-      setOrderData(data.orders[0]);
-    });
-  }, []);
+    // Добавляем params.number в зависимости
+    if (params.number) {
+      getOrderByNumberApi(Number(params.number)).then((data) => {
+        setOrderData(data.orders[0]);
+      });
+    }
+  }, [params.number]); // Теперь эффект будет срабатывать при изменении номера заказа
 
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length) return null;
@@ -51,7 +51,6 @@ export const OrderInfo: FC = () => {
         } else {
           acc[item].count++;
         }
-
         return acc;
       },
       {}

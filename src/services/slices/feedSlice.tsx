@@ -1,6 +1,11 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { TOrdersData } from '../../utils/types';
+import {
+  createSlice,
+  createAsyncThunk,
+  createSelector
+} from '@reduxjs/toolkit';
+import { TOrdersData, TOrder } from '../../utils/types';
 import { getFeedsApi } from '@api';
+import { RootState } from '../stores/store';
 
 export const getFeeds = createAsyncThunk('order/getFeeds', getFeedsApi);
 
@@ -17,16 +22,23 @@ const initialState: IFeedsState = {
   error: undefined
 };
 
+// Типизированные селекторы
+export const selectOrders = (state: RootState): TOrder[] => state.feed.orders;
+export const selectTotal = (state: RootState): number => state.feed.total;
+export const selectTotalToday = (state: RootState): number =>
+  state.feed.totalToday;
+
 export const feedsSlice = createSlice({
   name: 'feeds',
   initialState,
-  selectors: {},
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getFeeds.fulfilled, (state, action) => {
         state.orders = action.payload.orders;
         state.total = action.payload.total;
         state.totalToday = action.payload.totalToday;
+        state.loading = false;
       })
       .addCase(getFeeds.pending, (state) => {
         state.loading = true;
@@ -36,8 +48,7 @@ export const feedsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       });
-  },
-  reducers: {}
+  }
 });
 
 export default feedsSlice.reducer;
