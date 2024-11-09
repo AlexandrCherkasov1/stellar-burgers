@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import {
   Input,
   Button,
@@ -25,6 +25,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
         className={`pb-15 ${styles.form}`}
         name='register'
         onSubmit={handleSubmit}
+        autoComplete='on'
       >
         <>
           <div className='pb-6'>
@@ -37,6 +38,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               error={false}
               errorText=''
               size='default'
+              autoComplete='name'
             />
           </div>
           <div className='pb-6'>
@@ -45,10 +47,11 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               placeholder='E-mail'
               onChange={(e) => setEmail(e.target.value)}
               value={email}
-              name={'email'}
+              name='email'
               error={false}
               errorText=''
-              size={'default'}
+              size='default'
+              autoComplete='email'
             />
           </div>
           <div className='pb-6'>
@@ -56,6 +59,7 @@ export const RegisterUI: FC<RegisterUIProps> = ({
               onChange={(e) => setPassword(e.target.value)}
               value={password}
               name='password'
+              autoComplete='new-password'
             />
           </div>
           <div className={`pb-6 ${styles.button}`}>

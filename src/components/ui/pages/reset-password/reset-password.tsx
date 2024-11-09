@@ -21,14 +21,16 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
       <h3 className='pb-6 text text_type_main-medium'>Восстановление пароля</h3>
       <form
         className={`pb-15 ${styles.form}`}
-        name='login'
+        name='reset-password'
         onSubmit={handleSubmit}
+        autoComplete='on'
       >
         <div className='pb-6'>
           <PasswordInput
             onChange={(e) => setPassword(e.target.value)}
             value={password}
             name='password'
+            autoComplete='new-password'
           />
         </div>
         <div className='pb-6'>
@@ -41,6 +43,7 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
             error={false}
             errorText=''
             size='default'
+            autoComplete='one-time-code'
           />
         </div>
         <div className={`pb-6 ${styles.button}`}>
