@@ -1,14 +1,6 @@
-import reducer, { getFeeds } from '../feedSlice';
+import reducer, { getFeeds, initialState } from '../feedSlice';
 
 describe('feedSlice', () => {
-  const initialState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    loading: false,
-    error: undefined
-  };
-
   const mockOrders = {
     orders: [
       {
@@ -58,4 +50,4 @@ describe('feedSlice', () => {
     expect(state.loading).toBe(false);
     expect(state.error).toBe(error);
   });
-}); 
+});

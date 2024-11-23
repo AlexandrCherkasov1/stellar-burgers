@@ -1,15 +1,11 @@
-import reducer, { createOrder, getOrders, closeModal } from '../orderSlice';
+import reducer, {
+  createOrder,
+  getOrders,
+  closeModal,
+  initialState
+} from '../orderSlice';
 
 describe('orderSlice', () => {
-  const initialState = {
-    order: null,
-    userOrders: [],
-    orderRequest: false,
-    orderModalData: null,
-    loading: false,
-    error: undefined
-  };
-
   const mockOrder = {
     _id: '1',
     number: 1234,
@@ -62,4 +58,4 @@ describe('orderSlice', () => {
     expect(state.loading).toBe(false);
     expect(state.userOrders).toEqual([mockOrder]);
   });
-}); 
+});

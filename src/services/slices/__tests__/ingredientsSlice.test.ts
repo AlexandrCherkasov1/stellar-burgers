@@ -1,12 +1,6 @@
-import reducer, { getIngredients } from '../ingredientsSlice';
+import reducer, { getIngredients, initialState } from '../ingredientsSlice';
 
 describe('ingredientsSlice', () => {
-  const initialState = {
-    ingredients: [],
-    loading: false,
-    error: ''
-  };
-
   const mockIngredients = [
     {
       _id: '1',
@@ -55,4 +49,4 @@ describe('ingredientsSlice', () => {
     expect(state.loading).toBe(false);
     expect(state.error).toBe(error);
   });
-}); 
+});
