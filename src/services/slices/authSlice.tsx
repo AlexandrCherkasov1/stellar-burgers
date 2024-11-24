@@ -62,7 +62,7 @@ export interface TError {
   message: string;
 }
 
-const initialState: TUserAuthState = {
+export const initialState: TUserAuthState = {
   isAuthChecked: false,
   isAuthenticated: false,
   user: null,
@@ -140,6 +140,7 @@ const userAuthSlice = createSlice({
 });
 
 export default userAuthSlice.reducer;
+
 export const {
   authChecked,
   setUserInfo,
